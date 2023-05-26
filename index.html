@@ -9,7 +9,6 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     <style>
-
         * {
             overflow-x: hidden;
         }
@@ -20,9 +19,16 @@
             overflow-x: hidden;
         }
 
-        .box-table {
-            background-color: rgba(0, 0, 0, 0.183);
+        .table-borderless {
+            background-color: rgba(0, 0, 0, 0.200);
         }
+
+
+        tr:nth-child(odd) {
+            /* Color de fondo para las celdas impares */
+            background-color: rgba(0, 0, 0, 0.200);
+        }
+
 
         @media (max-width: 768px) {
             body {
@@ -42,7 +48,7 @@
                     <th scope="col">Autor</th>
                     <th scope="col">Titulo</th>
                     <th scope="col">Genero</th>
-                    <th scope="col">Genero</th>
+                    <th scope="col">Saraza</th>
                     <th scope="col">Genero</th>
                     <th scope="col">Saraza</th>
 
@@ -50,6 +56,36 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+
+                </tr>
                 <tr>
                     <th scope="row">1</th>
                     <td>Mark</td>
