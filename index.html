@@ -21,8 +21,24 @@
 
         .table-borderless {
             background-color: rgba(0, 0, 0, 0.200);
+            table-layout: fixed;
+            width: 100%;
+            /* Ajusta el ancho de la tabla al 100% del contenedor */
+
         }
 
+        th.col-number {
+            width: 5%;
+            /* Ancho personalizado para la columna # */
+        }
+
+        td {
+            text-overflow: ellipsis;
+            /* Agrega puntos suspensivos (...) para indicar el truncamiento */
+            white-space: nowrap;
+            /* Evita que el texto se divida en varias líneas */
+
+        }
 
         tr:nth-child(odd) {
             /* Color de fondo para las celdas impares */
@@ -44,7 +60,7 @@
         <table class="table table-borderless">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">#</th>
+                    <th class="col-number" scope="col">#</th>
                     <th scope="col">Autor</th>
                     <th scope="col">Titulo</th>
                     <th scope="col">Genero</th>
@@ -88,8 +104,8 @@
                 </tr>
                 <tr>
                     <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
+                    <td>Borges</td>
+                    <td>El ultimo camino desde</td>
                     <td>@mdo</td>
                     <td>@mdo</td>
                     <td>@mdo</td>
