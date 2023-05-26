@@ -30,7 +30,7 @@
         }
 
         th.col-number {
-            width: 5%;
+            width: 7%;
             /* Ancho personalizado para la columna # */
         }
 
@@ -68,6 +68,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        .myForm input,
+        .form-select {
+            background-color: transparent;
+            border: 1px solid black !important;
+            
+        }
+
+        input[type="text"]:focus,
+        .form-select:focus {
+            background-color: rgba(240, 255, 255, 0.600);
+            /* Cambia el color de fondo cuando se selecciona el campo de entrada */
+            box-shadow: none; /* Elimina el resaltado azul al seleccionar el campo de entrada */
+
+
         }
     </style>
 
