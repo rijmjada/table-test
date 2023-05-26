@@ -20,6 +20,8 @@
         }
 
         .table-borderless {
+            color: rgba(255, 228, 196, 0.69);
+            font-weight: 500;
             background-color: rgba(0, 0, 0, 0.200);
             table-layout: fixed;
             width: 100%;
@@ -51,11 +53,56 @@
                 font-size: xx-small;
             }
         }
+
+        /* Form Busqueda */
+        .options-search {
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .options-search .myForm {
+            max-width: 80%;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 
 </head>
 
 <body>
+
+    <!-- Form Busqueda -->
+    <div class="row options-search mt-3">
+        <form id="myForm" class="row gy-2 gx-3 align-items-center form-header myForm" onsubmit="BusquedaLibro(event)">
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="Autor" placeholder="Autor">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="Titulo" placeholder="Titulo">
+            </div>
+            <div class="col-md-3">
+                <label class="visually-hidden" for="autoSizingSelect">Genero</label>
+                <select class="form-select" id="autoSizingSelect">
+                    <option value="">Genero...</option>
+                    <option value="novela">Novela</option>
+                    <option value="historia">Historia</option>
+                    <option value="policial">Policial</option>
+                    <option value="ficcion">Ficcion</option>
+
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" id="btn-submit" class="btn btn-secondary">Buscar</button>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Tabla Libros -->
     <div class="box-table container  mt-5">
         <table class="table table-borderless">
             <thead class="table-dark">
@@ -63,82 +110,184 @@
                     <th class="col-number" scope="col">#</th>
                     <th scope="col">Autor</th>
                     <th scope="col">Titulo</th>
-                    <th scope="col">Genero</th>
-                    <th scope="col">Saraza</th>
-                    <th scope="col">Genero</th>
-                    <th scope="col">Saraza</th>
+                    <th scope="col">Género</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Select</th>
 
 
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-
-                </tr>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Borges</td>
-                    <td>El ultimo camino desde</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-
-                </tr>
+            <tbody id="tablaDatos">
+                <!--Aca se renderizan los libros -->
             </tbody>
         </table>
     </div>
 
+    <!-- Ventana modal -->
+    <div class="modal myModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
+
+
+    <script>
+
+
+        /* MODAL */
+        let myModal = new bootstrap.Modal(document.querySelector('.myModal')); // Obtiene la instancia de la ventana modal
+        const arrayIdsSeleccionados = new Array;
+        const api = 'https://ateneo-backend.up.railway.app/api/productos/';
+        const myForm = document.getElementById('myForm');
+        let btnSubmit = document.getElementById('btn-submit');
+
+
+        function BusquedaLibro(event) {
+
+            event.preventDefault();
+
+            // Desactivo el btn "buscar" para evitar clicks masivos una vez que se disparo la busqueda
+            // y no se dupliquen datos en la tabla.
+            btnSubmit.disabled = true;
+
+            // Obtén las referencias a los elementos del formulario
+            const autorInput = document.getElementById('Autor');
+            const tituloInput = document.getElementById('Titulo');
+            const generoSelect = document.getElementById('autoSizingSelect');
+
+            // Obtiene los valores de los campos del formulario
+            const autor = autorInput.value;
+            const titulo = tituloInput.value;
+            const genero = generoSelect.options[generoSelect.selectedIndex].value;
+
+            BuscarPeticionGet(autor, titulo, genero);
+
+
+            // Vuelvo a activar el btn buscar.
+            setTimeout(() => {
+                btnSubmit.disabled = false;
+            }, "500");
+        }
+
+        function BuscarPeticionGet(autor, titulo, genero) {
+
+            let contador = 0;
+
+            fetch(`https://ateneo-backend.up.railway.app/api/productos?autor=${autor}&titulo=${titulo}&genero=${genero}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tabla = document.getElementById('tablaDatos');
+
+                    if (data.query.length < 1) {
+                        const fila = document.createElement('tr');
+
+                        fila.textContent = 'Sin registros';
+                        tabla.appendChild(fila);
+                    }
+                    else {
+                        data.query.forEach(libro => {
+
+                            const fila = document.createElement('tr');
+
+                            let index = document.createElement('td');
+                            contador++;
+                            index.textContent = contador;
+                            fila.appendChild(index);
+
+                            const autor = document.createElement('td');
+                            autor.textContent = libro.autor;
+                            fila.appendChild(autor);
+
+                            const titulo = document.createElement('td');
+                            titulo.textContent = libro.titulo;
+                            fila.appendChild(titulo);
+
+                            const genero = document.createElement('td');
+                            genero.textContent = libro.genero;
+                            fila.appendChild(genero);
+
+                            const precio = document.createElement('td');
+                            precio.textContent = libro.precio;
+                            fila.appendChild(precio);
+
+                            const cantidad = document.createElement('td');
+                            cantidad.textContent = libro.cantidad;
+                            fila.appendChild(cantidad);
+
+                            // BOTONES //
+                            const acciones = document.createElement('td'); // Nueva celda para los botones
+                            acciones.classList.add('chekboxes'); // Agregamos una clase al elemento <td>
+
+                            const checkboxDiv = document.createElement('div');
+                            checkboxDiv.classList.add('form-check');
+
+                            const checkboxInput = document.createElement('input');
+                            checkboxInput.classList.add('form-check-input');
+
+                            // Establece el tipo del elemento de entrada (input) como "checkbox"
+                            // Podria tomar diferentes valores como: radio, text, number...etc.
+                            checkboxInput.type = 'checkbox';
+
+                            checkboxInput.addEventListener('click', (event) => {
+
+                                // Al asignar event.target a la variable checkbox, se guarda una referencia a ese checkbox para poder acceder a sus propiedades y realizar operaciones adicionales en función de su estado.
+                                const checkbox = event.target;
+
+                                // Leo el data attribute del input/checkbox y lo guardo en la variable 'libroId'
+                                const libroId = checkbox.dataset.libroId;
+
+                                if (checkbox.checked) {
+                                    agregarlibroSeleccionado(libroId);
+                                } else {
+                                    eliminarlibroSeleccionado(libroId);
+                                }
+                            });
+
+                            // Agrego un data atribute con el id correspondiente a la fila (libro)
+                            checkboxInput.dataset.libroId = libro._id;
+                            checkboxDiv.appendChild(checkboxInput);
+
+                            const checkboxLabel = document.createElement('label');
+                            checkboxLabel.classList.add('form-check-label');
+                            checkboxDiv.appendChild(checkboxLabel);
+
+                            acciones.appendChild(checkboxDiv);
+
+                            fila.appendChild(acciones);
+
+                            tabla.appendChild(fila);
+                        });
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+    </script>
+
 </body>
 
 </html>
