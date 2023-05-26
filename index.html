@@ -33,6 +33,9 @@
             width: 7%;
             /* Ancho personalizado para la columna # */
         }
+        
+       
+        
 
         td {
             text-overflow: ellipsis;
@@ -74,17 +77,21 @@
         .form-select {
             background-color: transparent;
             border: 1px solid black !important;
-            
         }
 
         input[type="text"]:focus,
         .form-select:focus {
             background-color: rgba(240, 255, 255, 0.600);
             /* Cambia el color de fondo cuando se selecciona el campo de entrada */
-            box-shadow: none; /* Elimina el resaltado azul al seleccionar el campo de entrada */
-
-
+            box-shadow: none;
+            /* Elimina el resaltado azul al seleccionar el campo de entrada */
         }
+
+        .chekboxes{
+            display: flex;
+            justify-content: center;
+        }
+
     </style>
 
 </head>
@@ -123,14 +130,17 @@
         <table class="table table-borderless">
             <thead class="table-dark">
                 <tr>
-                    <th class="col-number" scope="col">#</th>
+                    <!-- <th class="col-number" scope="col">#</th>
                     <th scope="col">Autor</th>
                     <th scope="col">Titulo</th>
                     <th scope="col">Género</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">Select</th>
+                    <th class="col-number" scope="col">Select</th> -->
 
+                    <th class="col-1">#</th>
+                    <th class="col">Autor</th>
+                    <th class="col">Titulo</th>
+                    <th class="col-2">Genero</th>
+                    <th class="col-2" style="text-align: center;">Select</th>
 
                 </tr>
             </thead>
@@ -181,7 +191,7 @@
         function BusquedaLibro(event) {
 
             event.preventDefault();
-
+            limpiarTabla();
             // Desactivo el btn "buscar" para evitar clicks masivos una vez que se disparo la busqueda
             // y no se dupliquen datos en la tabla.
             btnSubmit.disabled = true;
@@ -242,18 +252,12 @@
                             genero.textContent = libro.genero;
                             fila.appendChild(genero);
 
-                            const precio = document.createElement('td');
-                            precio.textContent = libro.precio;
-                            fila.appendChild(precio);
-
-                            const cantidad = document.createElement('td');
-                            cantidad.textContent = libro.cantidad;
-                            fila.appendChild(cantidad);
+              
 
                             // BOTONES //
                             const acciones = document.createElement('td'); // Nueva celda para los botones
                             acciones.classList.add('chekboxes'); // Agregamos una clase al elemento <td>
-
+                            
                             const checkboxDiv = document.createElement('div');
                             checkboxDiv.classList.add('form-check');
 
@@ -301,6 +305,10 @@
                 });
         }
 
+        function limpiarTabla() {
+            const tbody = document.getElementById('tablaDatos');
+            tbody.innerHTML = ''; // Establecer el contenido del tbody como una cadena vacía
+        }
 
     </script>
 
